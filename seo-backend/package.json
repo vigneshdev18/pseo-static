@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
-    "build:css": "tailwindcss -c tailwind.config.js -i ./src/css/input.css -o ./public/_static/main.css --minify",
+    "build:css": "tailwindcss -c tailwind.config.cjs -i ./src/css/input.css -o ./public/_static/main.css --minify",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest"
