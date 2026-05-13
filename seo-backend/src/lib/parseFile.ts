@@ -60,8 +60,8 @@ async function* iterateXlsx(
     entries: 'emit', sharedStrings: 'cache', worksheets: 'emit',
   });
   let header: string[] | null = null;
-  for await (const ws of wb) {
-    if (ws.id !== 1) continue;
+  for await (const ws of wb as any) {
+    if ((ws as any).id !== 1) continue;
     for await (const row of ws) {
       const values = (row.values as Array<unknown>).slice(1).map((v) => v == null ? '' : String(v));
       if (header == null) { header = values; continue; }
