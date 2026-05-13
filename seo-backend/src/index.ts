@@ -1,10 +1,19 @@
 import express from 'express';
-import 'dotenv/config';
+import { config } from './config.js';
 
 const app = express();
+app.use(express.json({ limit: '2mb' }));
+
 app.get('/api/seo/health', (_req, res) => {
-  res.json({ ok: true, ts: Date.now() });
+  res.json({
+    ok: true,
+    ts: Date.now(),
+    shardCount: config.shardCount,
+    region: config.aws.region,
+    bucket: config.aws.bucket,
+  });
 });
 
-const port = Number(process.env.PORT ?? 4001);
-app.listen(port, () => console.log(`seo-backend listening on ${port}`));
+app.listen(config.port, () => {
+  console.log(`seo-backend listening on ${config.port} bucket=${config.aws.bucket}`);
+});
