@@ -1,0 +1,31 @@
+{
+  "name": "scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "tsx seed-pages.ts",
+    "gen-csv": "tsx generate-csv.ts",
+    "import": "tsx trigger-import.ts",
+    "render": "tsx trigger-render.ts",
+    "probe": "tsx probe-s3.ts",
+    "measure": "tsx measure-bucket.ts",
+    "render-results": "tsx render-results.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1045.0",
+    "autocannon": "^8.0.0",
+    "axios": "^1.16.0",
+    "bullmq": "^5.76.8",
+    "dotenv": "^17.4.2",
+    "ioredis": "^5.10.1",
+    "mongoose": "^9.6.2",
+    "papaparse": "^5.5.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.7.0",
+    "@types/papaparse": "^5.5.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
