@@ -1,0 +1,41 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: seo-static-mongo
+    ports:
+      - "27019:27017"
+    volumes:
+      - seo-static-mongo-data:/data/db
+    command: ["--wiredTigerCacheSizeGB", "1"]
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4g
+
+  redis:
+    image: redis:7-alpine
+    container_name: seo-static-redis
+    ports:
+      - "6381:6379"
+    volumes:
+      - seo-static-redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
+  # Floci: open-source AWS-local emulator. Provides S3 on localhost:4566.
+  # Used for local dev (no real S3 PUT cost). Toggle off by unsetting AWS_ENDPOINT_URL.
+  floci:
+    image: floci/floci:latest
+    container_name: seo-static-floci
+    ports:
+      - "4566:4566"
+    volumes:
+      - seo-static-floci-data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SERVICES=s3
+
+volumes:
+  seo-static-mongo-data:
+  seo-static-redis-data:
+  seo-static-floci-data:
