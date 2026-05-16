@@ -17,11 +17,17 @@ export async function verifyBucket(): Promise<void> {
   try {
     await s3.send(new HeadBucketCommand({ Bucket: config.aws.bucket }));
   } catch (e: any) {
+    const code = e.$metadata?.httpStatusCode;
     // Auto-create bucket when running against Floci/LocalStack local endpoint.
-    if (usingLocalEndpoint && (e.name === 'NotFound' || e.$metadata?.httpStatusCode === 404)) {
+    if (usingLocalEndpoint && (e.name === 'NotFound' || code === 404)) {
       const { CreateBucketCommand } = await import('@aws-sdk/client-s3');
       await s3.send(new CreateBucketCommand({ Bucket: config.aws.bucket }));
       console.log(`floci: created bucket ${config.aws.bucket}`);
+      return;
+    }
+    // 403 = bucket exists but no HeadBucket permission (tight IAM). Trust + continue.
+    if (code === 403) {
+      console.warn(`verifyBucket: 403 on HeadBucket (likely IAM scope). Assuming ${config.aws.bucket} exists.`);
       return;
     }
     throw e;
